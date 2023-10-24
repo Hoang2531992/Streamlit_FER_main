@@ -10,6 +10,7 @@ import os
 import pandas as pd
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix
+from streamlit_webrtc import webrtc_streamer
 
 import joblib
 
