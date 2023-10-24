@@ -471,22 +471,22 @@ def main():
     if not video_file_buffer:
 
         if use_webcam:
-            vid = cv2.VideoCapture(0)
+            vid = cv.VideoCapture(0)
         else:
-            vid = cv2.VideoCapture(DEMO_VIDEO)
+            vid = cv.VideoCapture(DEMO_VIDEO)
             tfflie.name = DEMO_VIDEO
     
     else:
         tfflie.write(video_file_buffer.read())
-        vid = cv2.VideoCapture(tfflie.name)
+        vid = cv.VideoCapture(tfflie.name)
 
     #values 
-    width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = int(vid.get(cv2.CAP_PROP_FPS))
-    #codec = cv2.VideoWriter_fourcc(*FLAGS.output_format)
-    codec = cv2.VideoWriter_fourcc('V','P','0','9')
-    out = cv2.VideoWriter('output1.webm', codec, fps, (width, height))
+    width = int(vid.get(cv.CAP_PROP_FRAME_WIDTH))
+    height = int(vid.get(cv.CAP_PROP_FRAME_HEIGHT))
+    fps = int(vid.get(cv.CAP_PROP_FPS))
+    #codec = cv.VideoWriter_fourcc(*FLAGS.output_format)
+    codec = cv.VideoWriter_fourcc('V','P','0','9')
+    out = cv.VideoWriter('output1.webm', codec, fps, (width, height))
 
 
     st.sidebar.text('Input Video')
@@ -505,7 +505,7 @@ def main():
             if not ret:
                 break
             image.flags.writeable = False
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = cv.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = face_detection.process(image)
 
             if results.detections:
@@ -515,7 +515,7 @@ def main():
 
         vid.release()
         out.release()
-        cv2.destroyAllWindows()
+        cv.destroyAllWindows()
 
     st.success('Video is Processed')
     st.stop()
