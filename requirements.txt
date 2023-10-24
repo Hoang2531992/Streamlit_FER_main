@@ -7,3 +7,4 @@ pandas==1.4.2
 Pillow==8.2.0
 scikit_learn==1.1.1
 opencv_python_headless==4.6.0.66
+streamlit-webrtc
