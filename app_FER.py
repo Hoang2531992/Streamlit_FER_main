@@ -505,7 +505,7 @@ def main():
             if not ret:
                 break
             image.flags.writeable = False
-            image = cv.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
             results = face_detection.process(image)
 
             if results.detections:
