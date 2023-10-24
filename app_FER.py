@@ -442,19 +442,19 @@ mp_drawing = mp.solutions.drawing_utils
 
 
 
-# def main():
+def main():
 
-#     #title 
-#     st.title('Face Detection App')
+    #title 
+    st.title('Face Detection App')
 
-#     #sidebar title
-#     st.sidebar.title('Face Detection App')
+    #sidebar title
+    st.sidebar.title('Face Detection App')
 
-#     st.sidebar.subheader('Parameters')
-#     #creating a button for webcam
-#     use_webcam = st.sidebar.button('Use Webcam')
-#     #creating a slider for detection confidence 
-#     detection_confidence = st.sidebar.slider('Min Detection Confidence', min_value =0.0,max_value = 1.0,value = 0.5)
+    st.sidebar.subheader('Parameters')
+    #creating a button for webcam
+    use_webcam = st.sidebar.button('Use Webcam')
+    #creating a slider for detection confidence 
+    detection_confidence = st.sidebar.slider('Min Detection Confidence', min_value =0.0,max_value = 1.0,value = 0.5)
     
 #     #model selection 
 #     model_selection = st.sidebar.selectbox('Model Selection',options=[0,1,2])
@@ -517,8 +517,8 @@ mp_drawing = mp.solutions.drawing_utils
 #         out.release()
 #         cv2.destroyAllWindows()
 
-#     st.success('Video is Processed')
-#     st.stop()
+    st.success('Video is Processed')
+    st.stop()
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()
