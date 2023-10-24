@@ -430,95 +430,119 @@ import joblib
 
 
 #demo video 
-DEMO_VIDEO = 'demo.mp4'
+# DEMO_VIDEO = 'demo.mp4'
 
 
 
-#mediapipe inbuilt solutions 
-mp_face_detection = mp.solutions.face_detection
-mp_drawing = mp.solutions.drawing_utils
+# #mediapipe inbuilt solutions 
+# mp_face_detection = mp.solutions.face_detection
+# mp_drawing = mp.solutions.drawing_utils
 
 
 
 
 
-def main():
+# def main():
 
-    #title 
-    st.title('Face Detection App')
+#     #title 
+#     st.title('Face Detection App')
 
-    #sidebar title
-    st.sidebar.title('Face Detection App')
+#     #sidebar title
+#     st.sidebar.title('Face Detection App')
 
-    st.sidebar.subheader('Parameters')
-    #creating a button for webcam
-    use_webcam = st.sidebar.button('Use Webcam')
-    #creating a slider for detection confidence 
-    detection_confidence = st.sidebar.slider('Min Detection Confidence', min_value =0.0,max_value = 1.0,value = 0.5)
+#     st.sidebar.subheader('Parameters')
+#     #creating a button for webcam
+#     use_webcam = st.sidebar.button('Use Webcam')
+#     #creating a slider for detection confidence 
+#     detection_confidence = st.sidebar.slider('Min Detection Confidence', min_value =0.0,max_value = 1.0,value = 0.5)
     
-    #model selection 
-    model_selection = st.sidebar.selectbox('Model Selection',options=[0,1,2])
-    st.markdown(' ## Output')
-    stframe = st.empty()
+#     #model selection 
+#     model_selection = st.sidebar.selectbox('Model Selection',options=[0,1,2])
+#     st.markdown(' ## Output')
+#     stframe = st.empty()
     
-    #file uploader
-    video_file_buffer = st.sidebar.file_uploader("Upload a video", type=[ "mp4", "mov",'avi','asf', 'm4v' ])
+#     #file uploader
+#     video_file_buffer = st.sidebar.file_uploader("Upload a video", type=[ "mp4", "mov",'avi','asf', 'm4v' ])
 
     
-    #temporary file name 
-    tfflie = tempfile.NamedTemporaryFile(delete=False)
+#     #temporary file name 
+#     tfflie = tempfile.NamedTemporaryFile(delete=False)
 
-    if not video_file_buffer:
+#     if not video_file_buffer:
 
-        if use_webcam:
-            vid = cv.VideoCapture(0)
-        else:
-            vid = cv.VideoCapture(DEMO_VIDEO)
-            tfflie.name = DEMO_VIDEO
+#         if use_webcam:
+#             vid = cv.VideoCapture(0)
+#         else:
+#             vid = cv.VideoCapture(DEMO_VIDEO)
+#             tfflie.name = DEMO_VIDEO
     
-    else:
-        tfflie.write(video_file_buffer.read())
-        vid = cv.VideoCapture(tfflie.name)
+#     else:
+#         tfflie.write(video_file_buffer.read())
+#         vid = cv.VideoCapture(tfflie.name)
 
-    #values 
-    width = int(vid.get(cv.CAP_PROP_FRAME_WIDTH))
-    height = int(vid.get(cv.CAP_PROP_FRAME_HEIGHT))
-    fps = int(vid.get(cv.CAP_PROP_FPS))
-    #codec = cv.VideoWriter_fourcc(*FLAGS.output_format)
-    codec = cv.VideoWriter_fourcc('V','P','0','9')
-    out = cv.VideoWriter('output1.webm', codec, fps, (width, height))
-
-
-    st.sidebar.text('Input Video')
-    st.sidebar.video(tfflie.name)
-
-    # drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
+#     #values 
+#     width = int(vid.get(cv.CAP_PROP_FRAME_WIDTH))
+#     height = int(vid.get(cv.CAP_PROP_FRAME_HEIGHT))
+#     fps = int(vid.get(cv.CAP_PROP_FPS))
+#     #codec = cv.VideoWriter_fourcc(*FLAGS.output_format)
+#     codec = cv.VideoWriter_fourcc('V','P','0','9')
+#     out = cv.VideoWriter('output1.webm', codec, fps, (width, height))
 
 
-    with mp_face_detection.FaceDetection(
-    model_selection=model_selection, min_detection_confidence=detection_confidence) as face_detection:
+#     st.sidebar.text('Input Video')
+#     st.sidebar.video(tfflie.name)
+
+#     # drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
+
+
+#     with mp_face_detection.FaceDetection(
+#     model_selection=model_selection, min_detection_confidence=detection_confidence) as face_detection:
         
-        while vid.isOpened():
+#         while vid.isOpened():
 
-            ret, image = vid.read()
+#             ret, image = vid.read()
 
-            if not ret:
-                break
-            image.flags.writeable = False
-            image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
-            results = face_detection.process(image)
+#             if not ret:
+#                 break
+#             image.flags.writeable = False
+#             image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
+#             results = face_detection.process(image)
 
-            if results.detections:
-                for detection in results.detections:
-                    mp_drawing.draw_detection(image, detection)
-            stframe.image(image,use_column_width=True)
+#             if results.detections:
+#                 for detection in results.detections:
+#                     mp_drawing.draw_detection(image, detection)
+#             stframe.image(image,use_column_width=True)
 
-        vid.release()
-        out.release()
-        cv.destroyAllWindows()
+#         vid.release()
+#         out.release()
+#         cv.destroyAllWindows()
 
-    st.success('Video is Processed')
-    st.stop()
+#     st.success('Video is Processed')
+#     st.stop()
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
+
+import cv2
+from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
+
+faceCascade = cv2.CascadeClassifier(cv2.haarcascades+'haarcascade_frontalface_default.xml')
+
+
+class VideoTransformer(VideoTransformerBase):
+    def __init__(self):
+        self.i = 0
+
+    def transform(self, frame):
+        img = frame.to_ndarray(format="bgr24")
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces = faceCascade.detectMultiScale(gray, 1.3, 5)
+        i =self.i+1
+        for (x, y, w, h) in faces:
+            cv2.rectangle(img, (x, y), (x + w, y + h), (95, 207, 30), 3)
+            cv2.rectangle(img, (x, y - 40), (x + w, y), (95, 207, 30), -1)
+            cv2.putText(img, 'F-' + str(i), (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 2)
+
+        return img
+
+webrtc_streamer(key="example", video_transformer_factory=VideoTransformer)
