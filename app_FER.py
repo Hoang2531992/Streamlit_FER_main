@@ -422,11 +422,11 @@ import joblib
 # #                frame = image_resize(image=frame, width=640)
 # #                stframe.image(frame,channels='BGR', use_column_width=True)
 
-import cv2
-import mediapipe as mp
+# import cv2
+# import mediapipe as mp
 
-import tempfile
-import streamlit as st
+# import tempfile
+# import streamlit as st
 
 
 #demo video 
